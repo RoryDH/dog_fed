@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html ng-app="dogFed">
+<head>
+	<title>Dog fed?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+	<script type="text/javascript" src="/javascripts/doge.js"></script>
+
+	<style type="text/css">
+		.center-text
+		{
+			text-align: center;
+		}
+		footer
+		{
+		  text-align: center;
+		  margin-top: 25px;
+		  padding: 6px 0px;
+		  border-top: 1px solid #c6ded1;
+		  font-size: 12px;
+		  color: #6b8663;
+		}
+		footer a
+		{
+		  color: #6b8663;
+		}
+		footer a:visited
+		{
+		  color: #6b8663;
+		}
+		.pure-button-xlarge {
+      font-size: 170%;
+      width: 100%;
+    }
+    .pure-button-warning {
+      background: rgb(223, 117, 20);
+    }
+    .feed-form
+    {
+    	margin-bottom: 10px;
+    }
+    .feed-form input.note
+    {
+    	font-size: 18px;
+    }
+    .error
+    {
+    	color: red;
+    }
+    .last-fed-box
+    {
+    	background-color: #d3f1ee;
+    	border: #bcf1e9 solid 1px;
+    	margin: 10px 0;
+    	border-radius: 10px;
+    	padding: 5px;
+    }
+    tbody td.table-note
+    {
+    	font-size: 13px;
+    }
+    table, tbody
+    {
+    	width: 100%;
+    }
+    .top-status
+    {
+    	margin: 2px 0;
+    }
+	</style>
+
+</head>
+<body>
+	<div class="pure-g-r" ng-controller="FeedController">
+    <div class="pure-u-1-5">
+    </div>
+
+    <div class="pure-u-3-5">
+			<h4 class="center-text" ng-show="(feedStatus === 0) || (feedStatus === 3)">Loading</h4>
+      <h2 ng-show="feedStatus === -1" class="error center-text" ng-bind="errorMessage"></h2>
+
+      <div class="last-fed-box" ng-show="feedStatus > 0">
+      	<h1 class="top-status">{{r.dogName}} was last fed {{r && prettyDate(r.feeds[0].feedTime)}}</h1>
+      	<div>{{r && displayTime(r.feeds[0].feedTime)}}</div>
+      	<p ng-show="r.feeds[0].note">
+      		<b>Note: </b>
+      		<span ng-bind="r.feeds[0].note"></span>
+      	</p>
+      </div>
+
+      <form class="pure-form feed-form" ng-show="(feedStatus === 1) || (feedStatus === 2)">
+	      <button ng-click="newFeed()" class="pure-button pure-button-primary pure-button-xlarge {{feedStatus === 2 ? 'pure-button-warning' : 'pure-button-primary'}}">
+	      	{{feedStatus === 2 ? 'Sure?' : r.dogName + ' fed just now?'}}
+	      </button>
+		    <input ng-model="note" class="note pure-input-1" type="text" placeholder="Leave a note (optional)"><br>
+		  </form>
+
+			<table class="pure-table pure-table-horizontal">
+		    <tbody>
+	        <tr ng-repeat="f in r.feeds.slice(1, 100)" ng-class="{'pure-table-odd': $odd}">
+            <td>{{displayTime(f.feedTime)}}</td>
+            <td class="table-note">{{f.note}}</td>
+	        </tr>
+		    </tbody>
+			</table>
+
+		  <footer>
+		  	Made by <a href="https://twitter.com/RoryDHughes" target="_blank">Rory Hughes</a>
+		  </footer>
+    </div>
+
+    <div class="pure-u-1-5">
+    </div>
+  </div>
+</body>
+</html>
